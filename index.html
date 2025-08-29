@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Food Studio — Portfolio Template</title>
+    <meta name="description"
+        content="A clean, Wix-style food portfolio template with hero, gallery, about, services, testimonials and contact." />
+    <style>
+        :root {
+            --bg: #0f0f10;
+            /* main background */
+            --fg: #f7f7f7;
+            /* main word */
+            --muted: #bdbdbd;
+            /* secondaray word */
+            --acc: #e8c27c;
+            /* embellishment */
+            --card: #161618;
+            /* card background colour */
+            --soft: #242427;
+            /* support colour */
+            --radius: 18px;
+            --shadow: 0 10px 25px rgba(0, 0, 0, .35);
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg);
+            color: var(--fg);
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+        }
+
+        img {
+            max-width: 100%;
+            display: block
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none
+        }
+
+        .container {
+            width: min(1200px, 90vw);
+            margin: 0 auto
+        }
+
+        /* ====== top navigation ====== */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            background: linear-gradient(0deg, rgba(15, 15, 16, 0.25), rgba(15, 15, 16, 0.85));
+            backdrop-filter: blur(6px);
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 0
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            letter-spacing: .5px
+        }
+
+        .brand .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--acc);
+            display: inline-block
+        }
+
+        .menu {
+            display: flex;
+            gap: 26px
+        }
+
+        .menu a {
+            opacity: .85
+        }
+
+        .menu a:hover {
+            opacity: 1
+        }
+
+        .cta {
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: var(--acc);
+            color: #1a1a1a;
+            font-weight: 700
+        }
+
+        .hamburger {
+            display: none;
+            border: 1px solid #2b2b2e;
+            border-radius: 10px;
+            padding: 8px;
+            background: #151518
+        }
+
+        .hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: #ddd;
+            margin: 4px 0
+        }
+
+        @media (max-width: 860px) {
+            .menu {
+                display: none
+            }
+
+            .hamburger {
+                display: block
+            }
+        }
+
+        /* ====== hero ====== */
+        .hero {
+            position: relative;
+            isolation: isolate
+        }
+
+        .hero .bg {
+            position: relative;
+            height: 72vh;
+            min-height: 520px;
+            border-radius: 24px;
+            margin: 14px 0;
+            overflow: hidden
+        }
+
+        .hero .bg::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0, 0, 0, .35) 0%, rgba(0, 0, 0, .65) 70%);
+        }
+
+        .hero img.cover {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: contrast(1.05) saturate(1.05)
+        }
+
+        .hero .content {
+            position: absolute;
+            left: 6%;
+            bottom: 7%;
+            right: 6%;
+            z-index: 2;
+            display: grid;
+            gap: 12px;
+            max-width: 780px
+        }
+
+        .eyebrow {
+            font-size: 13px;
+            letter-spacing: .18em;
+            color: #e7e7e7;
+            text-transform: uppercase;
+            opacity: .85
+        }
+
+        .title {
+            font-size: clamp(28px, 6vw, 54px);
+            font-weight: 800;
+            line-height: 1.08
+        }
+
+        .subtitle {
+            color: var(--muted);
+            max-width: 56ch
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 6px
+        }
+
+        .btn {
+            padding: 12px 18px;
+            border-radius: 999px;
+            border: 1px solid #2c2c2f;
+            background: #151518;
+            color: #f1f1f1
+        }
+
+        .btn.primary {
+            background: var(--acc);
+            color: #1a1a1a;
+            border-color: transparent
+        }
+
+        /* ====== picture ====== */
+        section {
+            padding: 64px 0
+        }
+
+        .section-head {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 22px
+        }
+
+        .section-title {
+            font-size: clamp(22px, 3.8vw, 36px);
+            font-weight: 800
+        }
+
+        .gallery {
+            columns: 3 260px;
+            column-gap: 16px
+        }
+
+        .gallery figure {
+            break-inside: avoid;
+            background: var(--card);
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin: 0 0 16px 0;
+            box-shadow: var(--shadow)
+        }
+
+        .gallery figcaption {
+            padding: 12px 14px;
+            color: #d8d8d8;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between
+        }
+
+        .tag {
+            font-size: 12px;
+            color: #0f0f10;
+            background: var(--acc);
+            padding: 4px 10px;
+            border-radius: 999px
+        }
+
+        /* ====== footer ====== */
+        footer {
+            border-top: 1px solid #1f1f22;
+            padding: 28px 0;
+            color: #b9b9b9
+        }
+
+        .foot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px
+        }
+
+        .foot .social a {
+            opacity: .8;
+            margin-left: 12px
+        }
+
+        .foot .social a:hover {
+            opacity: 1
+        }
+
+        /* ====== animation ====== */
+        .reveal {
+            opacity: 0;
+            transform: translateY(12px);
+            transition: all .6s ease
+        }
+
+        .reveal.show {
+            opacity: 1;
+            transform: none
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container nav">
+            <a href="#" class="brand"><span class="dot"></span> Street Food Explorer</a>
+            <nav class="menu">
+                <a href="about.html" class="cta">About</a>
+                <a href="gallery.html" class="cta">Gallery</a>
+                <a href="favorites.html" class="cta">Favorites</a>
+                <a href="reviews.html" class="cta">Reviews</a>
+                <a href="map.html" class="cta">Map</a>
+                <a href="recipe.html" class="cta">Recipes</a>
+                <a href="contact.html" class="cta">Contact</a>
+            </nav>
+            <button class="hamburger" aria-label="Toggle Menu" onclick="toggleMobile()">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Drawer -->
+    <div id="drawer"
+        style="position:fixed;inset:60px 0 0 auto;width:min(78vw,360px);background:var(--card);transform:translateX(100%);transition:transform .35s ease;z-index:50;box-shadow:var(--shadow);border-top-left-radius:16px;border-bottom-left-radius:16px">
+
+        <nav style="display:flex;flex-direction:column;padding:18px 18px 24px;gap:12px">
+            <a href="about.html" onclick="toggleMobile()">About</a>
+            <a href="gallery.html" onclick="toggleMobile()">Gallery</a>
+            <a href="favorites.html" onclick="toggleMobile()">Favorites</a>
+            <a href="reviews.html" onclick="toggleMobile()">Reviews</a>
+            <a href="map.html" onclick="toggleMobile()">Map</a>
+            <a href="recipe.html" onclick="toggleMobile()">Recipes</a>
+            <a href="contact.html" class="cta" style="text-align:center" onclick="toggleMobile()">Contact</a>
+        </nav>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero container">
+        <div class="bg">
+            <img class="cover" alt="Food hero" src="../photo/food big picture.jpg" />
+            <div class="content reveal">
+                <span class="eyebrow">Sharing & Recommending</span>
+                <h1 class="title">Malaysia Street Food</h1>
+                <p class="subtitle">Discover Malaysia signature food.</p>
+                <div class="hero-actions">
+                    <a class="btn primary" href="about.html">About</a>
+                    <a class="btn" href="#work">Food Diagram</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Work / Gallery -->
+    <section id="work" class="container">
+        <div class="section-head">
+            <h2 class="section-title">Food Diagram</h2>
+        </div>
+        <div class="gallery">
+            <!-- figure site -->
+            <figure class="reveal">
+                <img src="../photo/NasiLemak.jpg" alt="Dish 1" />
+                <figcaption>
+                    Nasi Lemak <span class="tag">Dish</span>
+                </figcaption>
+            </figure>
+
+            <figure class="reveal">
+                <img src="../photo/WantanMee.jpg" alt="Dish 2" />
+                <figcaption>
+                    Wantan Mee <span class="tag">Dish</span>
+                </figcaption>
+            </figure>
+
+            <figure class="reveal">
+                <img src="../photo/TehTarik.jpeg" alt="Dish 3" />
+                <figcaption>
+                    Teh Tarik <span class="tag">Drink</span>
+                </figcaption>
+            </figure>
+
+            <figure class="reveal">
+                <img src="../photo/OtakOtak.jpg" alt="Dish 4" />
+                <figcaption>
+                    Otak-Otak <span class="tag">Dessert</span>
+                </figcaption>
+            </figure>
+
+            <figure class="reveal">
+                <img src="../photo/Linopot.jpeg" alt="Dish 5" />
+                <figcaption>
+                    Linopot <span class="tag">Dish</span>
+                </figcaption>
+            </figure>
+
+            <figure class="reveal">
+                <img src="../photo/RotiCanai.jpeg" alt="Dish 6" />
+                <figcaption>
+                    Roti Canai <span class="tag">Dish</span>
+                </figcaption>
+            </figure>
+        </div>
+    </section>
+
+
+    <footer>
+        <div class="container foot">
+            <div>© <span id="year"></span> Home. All rights reserved.</div>
+            <div class="social">
+                <a href="#">Instagram</a>
+                <a href="#">Facebook</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // year
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // mobile drawer
+        function toggleMobile() {
+            const el = document.getElementById('drawer');
+            const opened = el.style.transform === 'translateX(0px)';
+            el.style.transform = opened ? 'translateX(100%)' : 'translateX(0)';
+        }
+
+        // rolling animation presentation
+        const onScrollReveal = () => {
+            const els = document.querySelectorAll('.reveal');
+            const vh = window.innerHeight;
+            els.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < vh - 60) el.classList.add('show');
+            });
+        };
+        document.addEventListener('scroll', onScrollReveal, { passive: true });
+        window.addEventListener('load', onScrollReveal);
+    </script>
+</body>
+
+</html>
