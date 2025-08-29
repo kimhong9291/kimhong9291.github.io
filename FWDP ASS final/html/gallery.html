@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Malaysia Food!!!</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style types="text/css">
+        :root {
+            /* Global colors */
+            --bg-dark: #0f0f10;
+            --bg-light: #ffffff;
+            --primary: #ffd700;
+            /* gold */
+            --text: #222;
+            --text-light: #fff;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: var(--bg-light);
+            color: var(--text);
+        }
+
+        /* Header section */
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: url("../photo/malaysiaFood.jpg") center/cover no-repeat;
+            color: var(--text-light);
+            font-size: 1.5rem;
+            font-style: italic;
+        }
+
+        /* Navbar */
+        nav {
+            background: var(--bg-dark);
+            text-align: center;
+            padding: 12px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--primary);
+        }
+
+        /* Section Titles */
+        h3 {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 1.8rem;
+            color: var(--bg-dark);
+        }
+
+        /* Cuisine Section */
+        .container {
+            margin-top: 20px;
+            padding-bottom: 20px;
+        }
+
+        .container img {
+            border-radius: 10px;
+            margin-bottom: 10px;
+            transition: transform 0.3s;
+        }
+
+        .container img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Links to jump to section */
+        p a {
+            color: var(--bg-dark);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        p a:hover {
+            color: var(--primary);
+            text-decoration: underline;
+        }
+
+        .food-item {
+            position: relative;
+        }
+        
+        .favorite-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border: none;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .favorite-btn:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+        
+        .favorite-btn i {
+            color: #ccc;
+            transition: color 0.3s;
+        }
+        
+        .favorite-btn.active i {
+            color: #e74c3c;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2ecc71;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transform: translateX(100%);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    </style>
+
+</head>
+
+<body>
+    <header>
+        <h1>Malaysia Food Gallery</h1>
+    </header>
+    <nav>
+        <nav class="menu">
+            <a href="home.html">Home</a>
+            <a href="about.html">About</a>
+            <a href="gallery.html" class="cta">Gallery</a>
+            <a href="favorites.html">Favorites</a>
+            <a href="reviews.html">Reviews</a>
+            <a href="map.html">Map</a>
+            <a href="recipe.html">Recipes</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+
+    </nav>
+
+    <div id="drawer" style="position:fixed;inset:60px 0 0 auto;width:min(78vw,360px);background:var(--card);
+         transform:translateX(100%);transition:transform .35s ease;z-index:50;
+         box-shadow:var(--shadow);border-top-left-radius:16px;border-bottom-left-radius:16px">
+
+        <nav style="display:flex;flex-direction:column;padding:18px 18px 24px;gap:12px">
+            <a href="home.html" onclick="toggleMobile()">Home</a>
+            <a href="about.html" onclick="toggleMobile()">About</a>
+            <a href="gallery.html" onclick="toggleMobile()">Gallery</a>
+            <a href="favorites.html" onclick="toggleMobile()">Favorites</a>
+            <a href="reviews.html" onclick="toggleMobile()">Reviews</a>
+            <a href="map.html" onclick="toggleMobile()">Map</a>
+            <a href="recipe.html" onclick="toggleMobile()">Recipes</a>
+            <a href="contact.html" style="text-align:center" onclick="toggleMobile()">Contact</a>
+        </nav>
+    </div>
+
+    <script>
+        function toggleMobile() {
+            const el = document.getElementById('drawer');
+            const opened = el.style.transform === 'translateX(0px)';
+            el.style.transform = opened ? 'translateX(100%)' : 'translateX(0)';
+        }
+    </script>
+
+    <br>
+
+    <p><a class="link-offset-2 link-underline link-underline-opacity-0" href="#Malay Cuisine">Malay Cuisine</a></p>
+    <p><a class="link-offset-2 link-underline link-underline-opacity-0" href="#Chinese Cuisine">Chinese Cuisine</a></p>
+    <p><a class="link-offset-2 link-underline link-underline-opacity-0" href="#Indian Cuisine">Indian Cuisine</a></p>
+    <p><a class="link-offset-2 link-underline link-underline-opacity-0" href="#Baba-Nyonya Cuisine">Baba-Nyonya
+            Cuisine</a></p>
+    <p><a class="link-offset-2 link-underline link-underline-opacity-0"
+            href="#Orang Asli, Sabah & Sarawak Natives">Orang Asli, Sabah & Sarawak Natives</a></p>
+
+    <div id="Malay Cuisine">
+        <p>
+        <h3>Malay Cuisine</h3>
+        </p>
+        <div class="container text-center">
+            <div class="row align-items-start">
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Nasi Lemak" data-type="main" data-location="Malay Cuisine">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/NasiLemak.jpg" alt="Nasi Lemak" width="200" height="100" />
+                    <p>
+                    <h3>Nasi Lemak</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>National dish, Coconut rice wuth anchovies, Peanuts, Egg, Cucumber, Sambal</li>
+                    </ul>
+                </div>
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Rendang" data-type="main" data-location="Malay Cuisine">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/Rendang.jpg" alt="Rendang" width="175" height="100" />
+                    <p>
+                    <h3>Rendang</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Slow-cooked beef or chicken with coconut milk and spices</li>
+                    </ul>
+                </div>
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Satay" data-type="snack" data-location="Malay Cuisine">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/Satay.jpg" alt="Satay" width="100" height="100" />
+                    <p>
+                    <h3>Satay</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Grilled skewered meat with peanut sauce</li>
+                    </ul>
+                </div>
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Laksa" data-type="main" data-location="Malay Cuisine">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/Laksa.jpg" alt="Laksa" width="100" height="100" />
+                    <p>
+                    <h3>Laksa</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Spicy noodle soup (varies by region, e.g. curry laksa, asam laksa)</li>
+                    </ul>
+                </div>
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Nasi Kerabu" data-type="main" data-location="Malay Cuisine">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/NasiKerabu.jpg" alt="Nasi Kerabu" width="125" height="100" />
+                    <p>
+                    <h3>Nasi Kerabu</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Blue butterfly pea flower rice served with herbs, salted egg, grilled fish</li>
+                    </ul>
+                </div>
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Ikan Bakar" data-type="main" data-location="Malay Cuisine">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/IkanBakar.jpg" alt="Ikan Bakar" width="140" height="100" />
+                    <p>
+                    <h3>Ikan Bakar</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Spicy grilled fish wrapped in banana leaf</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="Chinese Cuisine">
+        <p>
+        <h3>Chinese Cuisine</h3>
+        </p>
+        <div class="container text-center">
+            <div class="row align-items-start">
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Hainanese Chicken Rice" data-type="main" data-location="Chinese Cuisine">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/HainaneseChickenRice.jpg" alt="Hainanese Chicken Rice" width="150" height="100" />
+                    <p>
+                    <h3>Hainanese Chicken Rice</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Poached chicken with fragrant rice</li>
+                    </ul>
+                </div>
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Char Kway Teow" data-type="main" data-location="Chinese Cuisine">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/CharKwayTeow.jpg" alt="Char Kway Teow" width="130" height="100" />
+                    <p>
+                    <h3>Char Kway Teow</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Penang-style stir-fried flat noodles with prawns, sausage, eggs</li>
+                    </ul>
+                </div>
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Bak Kut Teh" data-type="main" data-location="Chinese Cuisine">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/BakKutTeh.jpg" alt="Bak Kut Teh" width="130" height="100" />
+                    <p>
+                    <h3>Bak Kut Teh</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Herbal pork rib soup</li>
+                    </ul>
+                </div>
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Wantan Mee" data-type="main" data-location="Chinese Cuisine">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/WantanMee.jpg" alt="Wantan Mee" width="120" height="100" />
+                    <p>
+                    <h3>Wantan Mee</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Egg noodles with char siew (BBQ pork) and dumplings</li>
+                    </ul>
+                </div>
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Pan Mee" data-type="main" data-location="Chinese Cuisine">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/PanMee.jpg" alt="Pan Mee" width="110" height="100" />
+                    <p>
+                    <h3>Pan Mee</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Handmade noodle soup with anchovy broth</li>
+                    </ul>
+                </div>
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Yong Tau Foo" data-type="main" data-location="Chinese Cuisine">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/YongTauFoo.jpeg" alt="Yong Tau Foo" width="90" height="100" />
+                    <p>
+                    <h3>Yong Tau Foo</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Stuffed tofu/vegetables with fish or meat paste</li>
+                    </ul>
+                </div>
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Hokkien Mee" data-type="main" data-location="Chinese Cuisine">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/HokkienMee.png" alt="Hokkien Mee" width="170" height="100" />
+                    <p>
+                    <h3>Hokkien Mee</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Dark soy sauce noodles (Kuala Lumpur) or prawn noodle soup (Penang)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="Indian Cuisine">
+        <p>
+        <h3>Indian Cuisine</h3>
+        </p>
+        <div class="container text-center">
+            <div class="row align-items-start">
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Roti Canai" data-type="snack" data-location="Indian Cuisine">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/RotiCanai.jpeg" alt="Roti Canai" width="100" height="100" />
+                    <p>
+                    <h3>Roti Canai</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Flaky flatbread served with dhal or curry</li>
+                    </ul>
+                </div>
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Teh Tarik" data-type="drink" data-location="Indian Cuisine">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/TehTarik.jpeg" alt="Teh Tarik" width="100" height="100" />
+                    <p>
+                    <h3>Teh Tarik</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>National drink, pulled milk tea with frothy top</li>
+                    </ul>
+                </div>
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Banana Leaf Rice" data-type="main" data-location="Indian Cuisine">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/BananaLeafRice.jpg" alt="Banana Leaf Rice" width="150" height="100" />
+                    <p>
+                    <h3>Banana Leaf Rice</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Rice with assorted curries and vegetables served on banana leaf</li>
+                    </ul>
+                </div>
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Murtabak" data-type="snack" data-location="Indian Cuisine">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/Murtabak.jpg" alt="Murtabak" width="100" height="100" />
+                    <p>
+                    <h3>Murtabak</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Stuffed pancake with meat, egg, onions</li>
+                    </ul>
+                </div>
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Mee Goreng Mamak" data-type="main" data-location="Indian Cuisine">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/MeeGorengMamak.jpg" alt="Mee Goreng Mamak" width="180" height="100" />
+                    <p>
+                    <h3>Mee Goreng Mamak</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Spicy stir-fried noodles by Indian-Muslim hawkers</li>
+                    </ul>
+                </div>
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Rojak Mamak" data-type="snack" data-location="Indian Cuisine">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/RojakMamak.jpg" alt="Rojak Mamak" width="180" height="100" />
+                    <p>
+                    <h3>Rojak Mamak</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Mix of fried items, noodles, fruits with peanut sauce</li>
+                    </ul>
+                </div>
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Thosai" data-type="snack" data-location="Indian Cuisine">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/Thosai.jpg" alt="Thosai" width="170" height="100" />
+                    <p>
+                    <h3>Thosai</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Fermented rice pancake, served with coconut chutney or curry</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="Baba-Nyonya Cuisine">
+        <p>
+        <h3>Baba-Nyonya Cuisine</h3>
+        </p>
+        <div class="container text-center">
+            <div class="row align-items-start">
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Nyonya Laksa" data-type="main" data-location="Baba-Nyonya Cuisine">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/NyonyaLaksa.jpg" alt="Nyonya Laksa" width="120" height="100" />
+                    <p>
+                    <h3>Nyonya Laksa</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Curry coconut noodle soup</li>
+                    </ul>
+                </div>
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Asam Laksa" data-type="main" data-location="Baba-Nyonya Cuisine">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/AsamLaksa.jpg" alt="Asam Laksa" width="100" height="100" />
+                    <p>
+                    <h3>Asam Laksa</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Sour-spicy fish-based noodle soup</li>
+                    </ul>
+                </div>
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Ayam Pongteh" data-type="main" data-location="Baba-Nyonya Cuisine">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/AyamPongteh.jpg" alt="Ayam Pongteh" width="100" height="100" />
+                    <p>
+                    <h3>Ayam Pongteh</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Soy-braised chicken with potatoes</li>
+                    </ul>
+                </div>
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Nyonya Kuih" data-type="dessert" data-location="Baba-Nyonya Cuisine">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/NyonyaKuih.jpg" alt="Nyonya Kuih" width="120" height="100" />
+                    <p>
+                    <h3>Nyonya Kuih</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Colorful bite-sized cakes made with glutinous rice, coconut, pandan</li>
+                    </ul>
+                </div>
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Otak-Otak" data-type="snack" data-location="Baba-Nyonya Cuisine">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/OtakOtak.jpg" alt="Otak-Otak" width="120" height="100" />
+                    <p>
+                    <h3>Otak-Otak</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Spiced fish paste grilled in banana leaf</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="Orang Asli, Sabah & Sarawak Natives">
+        <p>
+        <h3>Orang Asli, Sabah & Sarawak Natives</h3>
+        </p>
+        <div class="container text-center">
+            <div class="row align-items-start">
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Hinava" data-type="main" data-location="Orang Asli, Sabah & Sarawak Natives">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/Hinava.jpeg" alt="Hinava" width="150" height="100" />
+                    <p>
+                    <h3>Hinava(Kadazan-Dusun, Sabah)</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Raw fish marinated with lime juice, ginger, chili</li>
+                    </ul>
+                </div>
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Linopot" data-type="main" data-location="Orang Asli, Sabah & Sarawak Natives">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/Linopot.jpeg" alt="Linopot" width="130" height="100" />
+                    <p>
+                    <h3>Linopot(Sabah)</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Rice wrapped in leaves for portability</li>
+                    </ul>
+                </div>
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Umai" data-type="main" data-location="Orang Asli, Sabah & Sarawak Natives">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/Umai.jpg" alt="Umai" width="175" height="100" />
+                    <p>
+                    <h3>Umai(Sarawak, Melanau)</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Raw fish salad with onions, chili, lime</li>
+                    </ul>
+                </div>
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Pansoh" data-type="main" data-location="Orang Asli, Sabah & Sarawak Natives">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/Pansoh.jpg" alt="Pansoh" width="90" height="100" />
+                    <p>
+                    <h3>Pansoh (Sarawak Iban)</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Bamboo-cooked rice with meat and herbs</li>
+                    </ul>
+                </div>
+                <div class="col food-item">
+                    <button class="favorite-btn" data-food="Sago Worms" data-type="snack" data-location="Orang Asli, Sabah & Sarawak Natives">
+                        <i class="far fa-heart"></i>
+                    </button>
+                    <img src="../photo/SagoWorm.jpeg" alt="Sago Worms" width="120" height="100" />
+                    <p>
+                    <h3>Sago Worms</h3>
+                    </p>
+                    <p>
+                    <h6>Features:</h6>
+                    </p>
+                    <ul>
+                        <li>Traditional protein source, eaten roasted or fried</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <span id="notification-text"></span>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add event listeners to all favorite buttons
+            const favoriteButtons = document.querySelectorAll('.favorite-btn');
+            
+            favoriteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const foodName = this.getAttribute('data-food');
+                    const foodType = this.getAttribute('data-type');
+                    const foodLocation = this.getAttribute('data-location');
+                    
+                    // Toggle the heart icon
+                    const icon = this.querySelector('i');
+                    if (icon.classList.contains('far')) {
+                        icon.classList.remove('far');
+                        icon.classList.add('fas');
+                        this.classList.add('active');
+                        
+                        // Add to favorites
+                        addToFavorites(foodName, foodType, foodLocation);
+                        
+                        // Show notification
+                        showNotification(`"${foodName}" added to favorites!`);
+                    } else {
+                        icon.classList.remove('fas');
+                        icon.classList.add('far');
+                        this.classList.remove('active');
+                        
+                        // Remove from favorites
+                        removeFromFavorites(foodName);
+                        
+                        // Show notification
+                        showNotification(`"${foodName}" removed from favorites!`);
+                    }
+                });
+            });
+            
+            // Check if items are already in favorites and update icons
+            checkFavorites();
+        });
+        
+        function addToFavorites(name, type, location) {
+            // Get existing favorites or initialize empty array
+            const favorites = JSON.parse(localStorage.getItem('foodFavorites')) || [];
+            
+            // Check if already in favorites
+            const existingIndex = favorites.findIndex(fav => fav.name === name);
+            
+            if (existingIndex === -1) {
+                // Create new favorite item
+                const newFavorite = {
+                    id: Date.now(), // Use timestamp as unique ID
+                    name,
+                    type,
+                    location,
+                    notes: '',
+                    added: new Date().toISOString().split('T')[0] // YYYY-MM-DD format
+                };
+                
+                // Add to array
+                favorites.push(newFavorite);
+                
+                // Save back to localStorage
+                localStorage.setItem('foodFavorites', JSON.stringify(favorites));
+            }
+        }
+        
+        function removeFromFavorites(name) {
+            // Get favorites from localStorage
+            let favorites = JSON.parse(localStorage.getItem('foodFavorites')) || [];
+            
+            // Filter out the favorite with the given name
+            favorites = favorites.filter(fav => fav.name !== name);
+            
+            // Save back to localStorage
+            localStorage.setItem('foodFavorites', JSON.stringify(favorites));
+        }
+        
+        function checkFavorites() {
+            // Get favorites from localStorage
+            const favorites = JSON.parse(localStorage.getItem('foodFavorites')) || [];
+            
+            // Update heart icons for items already in favorites
+            const favoriteButtons = document.querySelectorAll('.favorite-btn');
+            
+            favoriteButtons.forEach(button => {
+                const foodName = button.getAttribute('data-food');
+                const isFavorite = favorites.some(fav => fav.name === foodName);
+                
+                if (isFavorite) {
+                    const icon = button.querySelector('i');
+                    icon.classList.remove('far');
+                    icon.classList.add('fas');
+                    button.classList.add('active');
+                }
+            });
+        }
+        
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notification-text');
+            
+            notificationText.textContent = message;
+            notification.classList.add('show');
+            
+            // Hide notification after 3 seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+
+</html>

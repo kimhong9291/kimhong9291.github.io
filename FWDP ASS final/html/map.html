@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Malaysia Food Map</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    /* General body settings */
+    body {
+      margin: 0;
+      padding-top: 50px;
+      /* Leave space for navbar */
+      display: flex;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Sidebar */
+    #sidebar {
+      width: 280px;
+      background: #f9f9f9;
+      border-right: 1px solid #ccc;
+      padding: 10px;
+      overflow-y: auto;
+    }
+
+    /* Map container takes remaining space */
+    #map {
+      flex: 1;
+    }
+
+    /* Category section */
+    .category {
+      margin: 8px 0;
+    }
+
+    .category>button {
+      width: 100%;
+      padding: 10px;
+      text-align: left;
+      border: none;
+      background: #ddd;
+      font-weight: bold;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    /* Food list (sub-buttons inside category) */
+    .food-list {
+      display: none;
+      margin-left: 10px;
+      margin-top: 5px;
+    }
+
+    .food-list button {
+      display: block;
+      width: 100%;
+      margin: 4px 0;
+      padding: 8px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .food-list button:hover {
+      background: #f0f0f0;
+    }
+
+    /* Navigation bar */
+    .navbar {
+      position: fixed;
+      /* Stick to top */
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: #333;
+      /* Dark background */
+      color: white;
+      padding: 12px 20px;
+      z-index: 1000;
+      /* Stay above everything */
+      text-align: center;
+      /* Center all links */
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      /* Remove underline */
+      margin: 0 10px;
+      font-weight: bold;
+    }
+
+    .navbar a:hover {
+      color: #ffd700;
+      /* Gold hover effect */
+    }
+
+    /* Mobile drawer */
+    #drawer {
+      position: fixed;
+      inset: 50px 0 0 auto;
+      width: min(78vw, 300px);
+      background: #fff;
+      transform: translateX(100%);
+      transition: transform .35s ease;
+      z-index: 1500;
+      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+      border-top-left-radius: 12px;
+      border-bottom-left-radius: 12px;
+    }
+
+    #drawer nav {
+      display: flex;
+      flex-direction: column;
+      padding: 18px;
+      gap: 12px;
+    }
+
+    #drawer a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+
+    #drawer a:hover {
+      color: #ffd700;
+    }
+
+    /* Show hamburger on mobile */
+    @media (max-width: 768px) {
+      .navbar .links {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a href="home.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="favorites.html">Favorites</a>
+    <a href="reviews.html">Reviews</a>
+    <a href="map.html" class="cta">Map</a>
+    <a href="recipe.html">Recipes</a>
+    <a href="contact.html">Contact</a>
+  </nav>
+
+  <!-- Mobile Drawer -->
+  <div id="drawer">
+    <nav>
+      <a href="home.html" onclick="toggleMobile()">Home</a>
+      <a href="about.html" onclick="toggleMobile()">About</a>
+      <a href="gallery.html" onclick="toggleMobile()">Gallery</a>
+      <a href="favorites.html" onclick="toggleMobile()">Favorites</a>
+      <a href="reviews.html" onclick="toggleMobile()">Reviews</a>
+      <a href="map.html" onclick="toggleMobile()">Map</a>
+      <a href="recipe.html" onclick="toggleMobile()">Recipes</a>
+      <a href="contact.html" onclick="toggleMobile()">Contact</a>
+    </nav>
+  </div>
+
+
+  <!-- Sidebar -->
+  <div id="sidebar">
+    <h3>Malaysian Cuisines</h3>
+
+    <!-- Malay -->
+    <div class="category">
+      <button onclick="toggleCategory('malay')">Malay Cuisine</button>
+      <div id="malay" class="food-list">
+        <button onclick="focusOnFood('nasi-lemak')">Nasi Lemak</button>
+        <button onclick="focusOnFood('rendang')">Rendang</button>
+        <button onclick="focusOnFood('satey')">Satey</button>
+        <button onclick="focusOnFood('laksa')">Laksa</button>
+        <button onclick="focusOnFood('nasi-kerabu')">Nasi Kerabu</button>
+        <button onclick="focusOnFood('ikan-bakar')">Ikan Bakar</button>
+      </div>
+    </div>
+
+    <!-- Chinese -->
+    <div class="category">
+      <button onclick="toggleCategory('chinese')">Chinese Cuisine</button>
+      <div id="chinese" class="food-list">
+        <button onclick="focusOnFood('hainanese-chicken-rice')">Hainanese Chicken Rice</button>
+        <button onclick="focusOnFood('char-kway-teow')">Char Kway Teow</button>
+        <button onclick="focusOnFood('bak-kut-teh')">Bak Kut Teh</button>
+        <button onclick="focusOnFood('wan-tan-mee')">Wan Tan Mee</button>
+        <button onclick="focusOnFood('pan-mee')">Pan Mee</button>
+        <button onclick="focusOnFood('yong-tau-foo')">Yong Tau Foo</button>
+        <button onclick="focusOnFood('hokkien-mee')">Hokkien Mee</button>
+      </div>
+    </div>
+
+    <!-- Indian -->
+    <div class="category">
+      <button onclick="toggleCategory('indian')">Indian Cuisine</button>
+      <div id="indian" class="food-list">
+        <button onclick="focusOnFood('roti_canai')">Roti Canai</button>
+        <button onclick="focusOnFood('teh_tarik')">Teh Tarik</button>
+        <button onclick="focusOnFood('banana-leaf-rice')">Banana Leaf Rice</button>
+        <button onclick="focusOnFood('murtabak')">Murtabak</button>
+        <button onclick="focusOnFood('mee-goreng-mamak')">Mee Goreng Mamak</button>
+        <button onclick="focusOnFood('rojak-mamak')">Rojak Mamak</button>
+        <button onclick="focusOnFood('thosai')">Thosai</button>
+      </div>
+    </div>
+
+    <!-- Baba-Nyonya -->
+    <div class="category">
+      <button onclick="toggleCategory('baba-nyonya')">Baba Nyonya Cuisine</button>
+      <div id="baba-nyonya" class="food-list">
+        <button onclick="focusOnFood('nyonya-laksa')">Nyonya Laksa</button>
+        <button onclick="focusOnFood('asam-laksa')">Asam laksa</button>
+        <button onclick="focusOnFood('ayam-pongteh')">Ayam Pongteh</button>
+        <button onclick="focusOnFood('nyonya-kuih')">Nyonya Kuih</button>
+        <button onclick="focusOnFood('otak-otak')">Otak-Otak</button>
+      </div>
+    </div>
+
+    <!-- Orang Asli -->
+    <div class="category">
+      <button onclick="toggleCategory('orang-asli')">Orang Asli Sabah & Sarawak Natives</button>
+      <div id="orang-asli" class="food-list">
+        <button onclick="focusOnFood('hinava')">Hinava</button>
+        <button onclick="focusOnFood('linopot')">Linopot</button>
+        <button onclick="focusOnFood('umai')">Umai</button>
+        <button onclick="focusOnFood('pansoh')">Pansoh</button>
+        <button onclick="focusOnFood('sagoworm')">Sagoworm</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Map -->
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    // data
+    // food data
+    var foods = {
+      /* Malay Cuisine */
+      "nasi-lemak": {
+        name: "Nasi Lemak",
+        desc: "Malay National Dish.",
+        img: "../photo/NasiLemak.jpg",
+        coords: [4.2105, 101.9758] // malaysia coordinate
+      },
+      "rendang": {
+        name: "Rendang",
+        desc: "Malay National Dish.",
+        img: "../photo/Rendang.jpg",
+        coords: [4.2105, 101.9758] // 全国性
+      },
+      "satey": {
+        name: "Satay",
+        desc: "Malay National Dish.",
+        img: "../photo/Satay.jpg",
+        coords: [4.2105, 101.9758]
+      },
+      "laksa": {
+        name: "Laksa",
+        desc: "Malay National Dish.",
+        img: "../photo/Laksa.jpg",
+        coords: [4.2105, 101.9758]
+      },
+      "nasi-kerabu": {
+        name: "Nasi Kerabu",
+        desc: "Most popular in Kelantan",
+        img: "../photo/NasiKerabu.jpg",
+        coords: [6.1254, 102.2381] // Kelantan
+      },
+      "ikan-bakar": {
+        name: "Ikan Bakar",
+        desc: "Most popular in Malacca",
+        img: "../photo/IkanBakar.jpg",
+        coords: [2.1896, 102.2501] // Malacca
+      },
+
+      /* Chinese Cuisine */
+      "hainanese-chicken-rice": {
+        name: "Hainanese Chicken Rice",
+        desc: "Adapted from Hainan, China. Now as chinese national dish.",
+        img: "../photo/HainaneseChickenRice.jpg",
+        coords: [4.2105, 101.9758]
+      },
+      "char-kway-teow": {
+        name: "Char Kway Teow",
+        desc: "Popular in Penang",
+        img: "../photo/CharKwayTeow.jpg",
+        coords: [5.4141, 100.3288]
+      },
+      "bak-kut-teh": {
+        name: "Bak Kut Teh",
+        desc: "Popular in Klang, Selangor.",
+        img: "../photo/BakKutTeh.jpg",
+        coords: [3.0439, 101.4496]
+      },
+      "wan-tan-mee": {
+        name: "Wan Tan Mee",
+        desc: "Chinese national dish.",
+        img: "../photo/WantanMee.jpg",
+        coords: [4.2105, 101.9758]
+      },
+      "pan-mee": {
+        name: "Pan Mee",
+        desc: "Invented in Kuala Lumpur.",
+        img: "../photo/PanMee.jpg",
+        coords: [3.1390, 101.6869]
+      },
+      "yong-tau-foo": {
+        name: "Yong Tau Foo",
+        desc: "Invented in Kuala Lumpur.",
+        img: "../photo/YongTauFoo.jpeg",
+        coords: [3.1390, 101.6869]
+      },
+      "hokkien-mee": {
+        name: "Hokkien Mee",
+        desc: "Chinese National Dish.",
+        img: "../photo/HokkienMee.png",
+        coords: [4.2105, 101.9758]
+      },
+
+      /* Indian Cuisine */
+      "roti_canai": {
+        name: "Roti Canai",
+        desc: "Indian National Dish.",
+        img: "../photo/RotiCanai.jpeg",
+        coords: [4.2105, 101.9758]
+      },
+      "teh_tarik": {
+        name: "Teh Tarik",
+        desc: "Malaysia famous pulled milk tea.",
+        img: "../photo/TehTarik.jpeg",
+        coords: [4.2105, 101.9758]
+      },
+      "banana-leaf-rice": {
+        name: "Banana Leaf Rice",
+        desc: "Indian National Dish.",
+        img: "../photo/BananaLeafRice.jpg",
+        coords: [4.2105, 101.9758]
+      },
+      "murtabak": {
+        name: "Murtabak",
+        desc: "Indian National Dish.",
+        img: "../photo/Murtabak.jpg",
+        coords: [4.2105, 101.9758]
+      },
+      "mee-goreng-mamak": {
+        name: "Mee Goreng Mamak",
+        desc: "Indian National Dish.",
+        img: "../photo/MeeGorengMamak.jpg",
+        coords: [4.2105, 101.9758]
+      },
+      "rojak-mamak": {
+        name: "Rojak Mamak",
+        desc: "Indian National Dish.",
+        img: "../photo/RojakMamak.jpg",
+        coords: [4.2105, 101.9758]
+      },
+      "thosai": {
+        name: "Thosai",
+        desc: "Indian National Dish.",
+        img: "../photo/Thosai.jpg",
+        coords: [4.2105, 101.9758]
+      },
+
+      /* Baba-Nyonya Cuisine */
+      "nyonya-laksa": {
+        name: "Nyonya Laksa",
+        desc: "Especially in Malacca.",
+        img: "../photo/NyonyaLaksa.jpg",
+        coords: [2.1896, 102.2501]
+      },
+      "asam-laksa": {
+        name: "Asam Laksa",
+        desc: "Most popular in Penang.",
+        img: "../photo/AsamLaksa.jpg",
+        coords: [5.4141, 100.3288]
+      },
+      "ayam-pongteh": {
+        name: "Ayam Pongteh",
+        desc: "Nyonya classic dish in Malacca.",
+        img: "../photo/AyamPongteh.jpg",
+        coords: [2.1896, 102.2501]
+      },
+      "nyonya-kuih": {
+        name: "Nyonya Kuih",
+        desc: "Dessert that popular in Malacca.",
+        img: "../photo/NyonyaKuih.jpg",
+        coords: [2.1896, 102.2501]
+      },
+      "otak-otak": {
+        name: "Otak-Otak",
+        desc: "Found in Johor & Malacca.",
+        img: "../photo/OtakOtak.jpg",
+        coords: [1.4927, 103.7414]
+      },
+
+      /* Orang Asli, Sabah & Sarawak Natives */
+      "hinava": {
+        name: "Hinava",
+        desc: "Kadazan-Dusun raw fish salad from Sabah.",
+        img: "../photo/Hinava.jpeg",
+        coords: [5.9784, 116.0753]
+      },
+      "linopot": {
+        name: "Linopot",
+        desc: "Sabahan dish, also traditional Kadazan-Dusun food.",
+        img: "../photo/Linopot.jpeg",
+        coords: [5.9784, 116.0753]
+      },
+      "umai": {
+        name: "Umai",
+        desc: "Melanau tradition dish from Sarawak.",
+        img: "../photo/Umai.jpg",
+        coords: [1.5533, 110.3592]
+      },
+      "pansoh": {
+        name: "Pansoh",
+        desc: "Traditional Iban dish from Sarawak.",
+        img: "../photo/Pansoh.jpg",
+        coords: [1.5533, 110.3592]
+      },
+      "sagoworm": {
+        name: "Sago Worm",
+        desc: "Eaten by natives in Sarawak & Sabah.",
+        img: "../photo/SagoWorm.jpeg",
+        coords: [1.5533, 110.3592]
+      }
+    };
+
+
+
+
+    // map initialization
+    var map = L.map('map').setView([4.2105, 101.9758], 6);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19
+    }).addTo(map);
+
+    function toggleCategory(id) {
+      let el = document.getElementById(id);
+      if (el.style.display === "block") {
+        el.style.display = "none";
+      } else {
+        el.style.display = "block";
+      }
+    }
+
+    function toggleMobile() {
+      const drawer = document.getElementById("drawer");
+      if (drawer.style.transform === "translateX(0%)") {
+        drawer.style.transform = "translateX(100%)";
+      } else {
+        drawer.style.transform = "translateX(0%)";
+      }
+    }
+
+    // save current marker
+    var currentMarker = null;
+
+    // press a button and present only one marker
+    function focusOnFood(key) {
+      let food = foods[key];
+      if (!food) return;
+
+      // if have current marker，move it
+      if (currentMarker) {
+        map.removeLayer(currentMarker);
+        currentMarker = null;
+      }
+
+      // add new marker
+      currentMarker = L.marker(food.coords).addTo(map);
+      currentMarker.bindPopup(
+        `<b>${food.name}</b><br>
+     <img src="${food.img}" width="150"><br>
+     ${food.desc}`
+      );
+
+      // move to map center and merge 
+      map.flyTo(food.coords, 7, { animate: true, duration: 1.2 });
+      currentMarker.openPopup();
+    }
+  </script>
+</body>
+
+</html>
