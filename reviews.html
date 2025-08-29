@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Street Food Explorer - Reviews</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --bg: #0f0f10;
+            --fg: #f7f7f7;
+            --muted: #bdbdbd;
+            --acc: #e8c27c;
+            --card: #161618;
+            --soft: #242427;
+            --radius: 18px;
+            --shadow: 0 10px 25px rgba(0, 0, 0, .35);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            background: var(--bg);
+            color: var(--fg);
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+            line-height: 1.6;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        .container {
+            width: min(1200px, 90vw);
+            margin: 0 auto;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            background: linear-gradient(0deg, rgba(15, 15, 16, 0.25), rgba(15, 15, 16, 0.85));
+            backdrop-filter: blur(6px);
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 0;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            letter-spacing: .5px;
+        }
+
+        .brand .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--acc);
+            display: inline-block;
+        }
+
+        .menu {
+            display: flex;
+            gap: 26px;
+        }
+
+        .menu a {
+            opacity: .85;
+        }
+
+        .menu a:hover {
+            opacity: 1;
+        }
+
+        .cta {
+            padding: 10px 16px;
+            border-radius: 999px;
+            background: var(--acc);
+            color: #1a1a1a;
+            font-weight: 700;
+        }
+
+        .hamburger {
+            display: none;
+            border: 1px solid #2b2b2e;
+            border-radius: 10px;
+            padding: 8px;
+            background: #151518;
+            cursor: pointer;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: #ddd;
+            margin: 4px 0;
+        }
+
+        .hero {
+            position: relative;
+            isolation: isolate
+        }
+
+        .hero .bg {
+            position: relative;
+            height: 72vh;
+            min-height: 520px;
+            border-radius: 24px;
+            margin: 14px 0;
+            overflow: hidden
+        }
+
+        .hero .bg::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0, 0, 0, .35) 0%, rgba(0, 0, 0, .65) 70%);
+        }
+
+        .hero img.cover {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: contrast(1.05) saturate(1.05)
+        }
+
+        .hero .content {
+            position: absolute;
+            left: 6%;
+            bottom: 7%;
+            right: 6%;
+            z-index: 2;
+            display: grid;
+            gap: 12px;
+            max-width: 780px
+        }
+
+        .eyebrow {
+            font-size: 13px;
+            letter-spacing: .18em;
+            color: #e7e7e7;
+            text-transform: uppercase;
+            opacity: .85;
+        }
+
+        .title {
+            font-size: clamp(28px, 6vw, 54px);
+            font-weight: 800;
+            line-height: 1.08;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            max-width: 56ch;
+        }
+
+        section {
+            padding: 40px 0;
+        }
+
+        .section-head {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+
+        .section-title {
+            font-size: clamp(22px, 3.8vw, 36px);
+            font-weight: 800;
+        }
+
+        .section-desc {
+            color: var(--muted);
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 30px;
+            background: var(--card);
+            padding: 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .filter-group label {
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid #2c2c2f;
+            background: #141416;
+            color: #f1f1f1;
+            width: 100%;
+        }
+
+        .review-form {
+            background: var(--card);
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--muted);
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid #2c2c2f;
+            background: #141416;
+            color: #f1f1f1;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .rating {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .rating input {
+            display: none;
+        }
+
+        .rating label {
+            font-size: 1.8rem;
+            color: #444;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .rating input:checked~label {
+            color: #444;
+        }
+
+        .rating label:hover,
+        .rating label:hover~label,
+        .rating input:checked+label,
+        .rating input:checked~label {
+            color: var(--acc);
+        }
+
+        .btn-submit {
+            padding: 12px 24px;
+            border-radius: 999px;
+            background: var(--acc);
+            color: #1a1a1a;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .reviews-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .review-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .review-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .review-content {
+            padding: 20px;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .reviewer-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--acc);
+        }
+
+        .review-date {
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .review-food {
+            color: var(--muted);
+            font-style: italic;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
+        .review-rating {
+            color: var(--acc);
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+
+        .review-text {
+            color: var(--muted);
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .review-location {
+            color: #777;
+            font-size: 0.85rem;
+            margin-top: 10px;
+        }
+
+        .no-reviews {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+
+        .no-reviews i {
+            font-size: 3.5rem;
+            color: var(--acc);
+            margin-bottom: 20px;
+        }
+
+        .no-reviews h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .no-reviews p {
+            color: var(--muted);
+            margin-bottom: 25px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        footer {
+            border-top: 1px solid #1f1f22;
+            padding: 28px 0;
+            color: #b9b9b9;
+            margin-top: 60px;
+        }
+
+        .foot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .foot .social a {
+            opacity: .8;
+            margin-left: 12px;
+        }
+
+        .foot .social a:hover {
+            opacity: 1;
+        }
+
+        @media (max-width: 860px) {
+            .menu {
+                display: none;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .filters {
+                grid-template-columns: 1fr;
+            }
+
+            .section-head {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .reviews-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .hero .bg {
+                height: 40vh;
+                min-height: 300px;
+            }
+
+            .review-form {
+                padding: 20px;
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(12px);
+            transition: all .6s ease;
+        }
+
+        .reveal.show {
+            opacity: 1;
+            transform: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container nav">
+            <a href="reviews.html" class="brand"><span class="dot"></span> Street Food Explorer</a>
+            <nav class="menu">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="gallery.html">Gallery</a>
+                <a href="favorites.html">Favorites</a>
+                <a href="reviews.html" class="cta">Reviews</a>
+                <a href="map.html">Map</a>
+                <a href="recipe.html">Recipes</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+            <button class="hamburger" aria-label="Toggle Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Drawer -->
+    <div id="drawer" style="position:fixed;inset:60px 0 0 auto;width:min(78vw,360px);background:var(--card);
+         transform:translateX(100%);transition:transform .35s ease;z-index:50;
+         box-shadow:var(--shadow);border-top-left-radius:16px;border-bottom-left-radius:16px">
+
+        <nav style="display:flex;flex-direction:column;padding:18px 18px 24px;gap:12px">
+            <a href="index.html" onclick="toggleMobile()">Home</a>
+            <a href="about.html" onclick="toggleMobile()">About</a>
+            <a href="gallery.html" onclick="toggleMobile()">Gallery</a>
+            <a href="favorites.html" onclick="toggleMobile()">Favorites</a>
+            <a href="reviews.html" class="cta" onclick="toggleMobile()">Reviews</a>
+            <a href="map.html" onclick="toggleMobile()">Map</a>
+            <a href="recipe.html" onclick="toggleMobile()">Recipes</a>
+            <a href="contact.html" onclick="toggleMobile()">Contact</a>
+        </nav>
+    </div>
+
+    <!-- Hero -->
+    <section class="hero container">
+        <div class="bg">
+            <img class="cover" alt="Street food reviews" src="../photo/Background2.jpg" />
+            <div class="content reveal">
+                <span class="eyebrow">Share Your Experience</span>
+                <h1 class="title">Street Food Reviews</h1>
+                <p class="subtitle">Discover what others are saying about street food vendors and share your own
+                    experiences</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <!-- Review Form -->
+        <section class="review-form">
+            <div class="section-head">
+                <h2 class="section-title">Share Your Experience</h2>
+                <p class="section-desc">Help others discover the best street food</p>
+            </div>
+
+            <form id="reviewForm">
+                <div class="form-group">
+                    <label for="reviewerName">Your Name</label>
+                    <input type="text" id="reviewerName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="foodItem">Food Item</label>
+                    <input type="text" id="foodItem" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="location">Location/Vendor</label>
+                    <input type="text" id="location" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Rating</label>
+                    <div class="rating">
+                        <input type="radio" id="star5" name="rating" value="5" required>
+                        <label for="star5">★</label>
+                        <input type="radio" id="star4" name="rating" value="4">
+                        <label for="star4">★</label>
+                        <input type="radio" id="star3" name="rating" value="3">
+                        <label for="star3">★</label>
+                        <input type="radio" id="star2" name="rating" value="2">
+                        <label for="star2">★</label>
+                        <input type="radio" id="star1" name="rating" value="1">
+                        <label for="star1">★</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="reviewText">Your Review</label>
+                    <textarea id="reviewText" required></textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">Submit Review</button>
+            </form>
+        </section>
+
+        <!-- Filters -->
+        <div class="filters">
+            <div class="filter-group">
+                <label for="filterRating">Filter by Rating</label>
+                <select id="filterRating">
+                    <option value="all">All Ratings</option>
+                    <option value="5">5 Stars</option>
+                    <option value="4">4 Stars</option>
+                    <option value="3">3 Stars</option>
+                    <option value="2">2 Stars</option>
+                    <option value="1">1 Star</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="sortReviews">Sort By</label>
+                <select id="sortReviews">
+                    <option value="recent">Most Recent</option>
+                    <option value="rating">Highest Rated</option>
+                    <option value="name">Food Name</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="searchReviews">Search Reviews</label>
+                <input type="text" id="searchReviews" placeholder="Search reviews...">
+            </div>
+        </div>
+
+        <!-- Reviews Grid -->
+        <section>
+            <div class="section-head">
+                <h2 class="section-title">Recent Reviews</h2>
+                <p class="section-desc">What people are saying about street food</p>
+            </div>
+
+            <div class="reviews-grid" id="reviewsContainer">
+                <!-- Reviews will be displayed here -->
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container foot">
+            <div>© <span id="year"></span> Street Food Explorer. All rights reserved.</div>
+            <div class="social">
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sample review data
+        const sampleReviews = [
+            { id: 1, reviewerName: "Alex Chen", foodItem: "Teh Tarik", location: "Mamak", rating: 5, reviewText: "The Teh Tarik was smooth, frothy, and perfectly balanced...", date: "2025-03-15" },
+            { id: 2, reviewerName: "Maria", foodItem: "Char Kway Teow", location: "Night Market", rating: 4, reviewText: "The Char Kway Teow had a smoky ‘wok hei’ flavor...", date: "2025-05-12" },
+            { id: 3, reviewerName: "James Kim", foodItem: "Nasi Lemak", location: "Food Truck", rating: 5, reviewText: "This Nasi Lemak was fantastic!...", date: "2025-07-07" },
+            { id: 4, reviewerName: "Sarah Johnson", foodItem: "Asam Laksa", location: "Night Market", rating: 3, reviewText: "The Asam Laksa was tangy, spicy, and refreshing...", date: "2023-08-20" }
+        ];
+
+        function initScrollAnimation() {
+            onScrollReveal();
+        }
+
+        // ✅ Only one toggleMobile function
+        function toggleMobile() {
+            const el = document.getElementById('drawer');
+            const opened = el.style.transform === 'translateX(0px)';
+            el.style.transform = opened ? 'translateX(100%)' : 'translateX(0)';
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Set current year
+            document.getElementById('year').textContent = new Date().getFullYear();
+
+            // Load reviews when page loads
+            loadReviews();
+
+            // Add event listeners for filtering and sorting
+            document.getElementById('filterRating').addEventListener('change', loadReviews);
+            document.getElementById('sortReviews').addEventListener('change', loadReviews);
+            document.getElementById('searchReviews').addEventListener('input', loadReviews);
+
+            // Handle form submission
+            document.getElementById('reviewForm').addEventListener('submit', function (e) {
+                e.preventDefault();
+                const reviewerName = document.getElementById('reviewerName').value;
+                const foodItem = document.getElementById('foodItem').value;
+                const location = document.getElementById('location').value;
+                const rating = document.querySelector('input[name="rating"]:checked').value;
+                const reviewText = document.getElementById('reviewText').value;
+                const date = new Date().toISOString().split('T')[0];
+
+                const review = { id: Date.now(), reviewerName, foodItem, location, rating, reviewText, date };
+
+                saveReview(review);
+                this.reset();
+                loadReviews();
+            });
+
+            // Hamburger toggle
+            document.querySelector('.hamburger').addEventListener('click', toggleMobile);
+
+            // Scroll animation
+            initScrollAnimation();
+        });
+
+        function saveReview(review) {
+            let reviews = JSON.parse(localStorage.getItem('foodReviews')) || sampleReviews;
+            reviews.push(review);
+            localStorage.setItem('foodReviews', JSON.stringify(reviews));
+        }
+
+        function loadReviews() {
+            let reviews = JSON.parse(localStorage.getItem('foodReviews')) || sampleReviews;
+            const filterRating = document.getElementById('filterRating').value;
+            const sortBy = document.getElementById('sortReviews').value;
+            const searchText = document.getElementById('searchReviews').value.toLowerCase();
+
+            if (filterRating !== 'all') {
+                reviews = reviews.filter(review => review.rating == filterRating);
+            }
+            if (searchText) {
+                reviews = reviews.filter(review =>
+                    review.foodItem.toLowerCase().includes(searchText) ||
+                    review.location.toLowerCase().includes(searchText) ||
+                    review.reviewText.toLowerCase().includes(searchText) ||
+                    review.reviewerName.toLowerCase().includes(searchText)
+                );
+            }
+            if (sortBy === 'recent') {
+                reviews.sort((a, b) => new Date(b.date) - new Date(a.date));
+            } else if (sortBy === 'rating') {
+                reviews.sort((a, b) => b.rating - a.rating);
+            } else if (sortBy === 'name') {
+                reviews.sort((a, b) => a.foodItem.localeCompare(b.foodItem));
+            }
+            displayReviews(reviews);
+        }
+
+        function displayReviews(reviews) {
+            const reviewsContainer = document.getElementById('reviewsContainer');
+            reviewsContainer.innerHTML = '';
+
+            if (reviews.length === 0) {
+                reviewsContainer.innerHTML = `
+                <div class="no-reviews">
+                    <i class="fas fa-comment-alt"></i>
+                    <h3>No reviews yet</h3>
+                    <p>Be the first to share your street food experience! Your review will help others discover amazing food.</p>
+                </div>`;
+                return;
+            }
+
+            reviews.forEach(review => {
+                const reviewElement = document.createElement('div');
+                reviewElement.classList.add('review-card', 'reveal');
+
+                const reviewDate = new Date(review.date).toLocaleDateString('en-US', {
+                    year: 'numeric', month: 'long', day: 'numeric'
+                });
+
+                let stars = '';
+                for (let i = 0; i < 5; i++) {
+                    stars += i < review.rating ? '★' : '☆';
+                }
+
+                reviewElement.innerHTML = `
+                <div class="review-content">
+                    <div class="review-header">
+                        <span class="reviewer-name">${review.reviewerName}</span>
+                        <span class="review-date">${reviewDate}</span>
+                    </div>
+                    <div class="review-food">${review.foodItem}</div>
+                    <div class="review-rating">${stars}</div>
+                    <div class="review-text">${review.reviewText}</div>
+                    <div class="review-location">${review.location}</div>
+                </div>`;
+                reviewsContainer.appendChild(reviewElement);
+            });
+
+            setTimeout(initScrollAnimation, 100);
+        }
+
+        const onScrollReveal = () => {
+            const els = document.querySelectorAll('.reveal');
+            const vh = window.innerHeight;
+            els.forEach(el => {
+                const rect = el.getBoundingClientRect();
+                if (rect.top < vh - 60) el.classList.add('show');
+            });
+        };
+        document.addEventListener('scroll', onScrollReveal, { passive: true });
+        window.addEventListener('load', onScrollReveal);
+
+        // scroll animation function (already defined above in initScrollAnimation)
+        document.addEventListener('scroll', initScrollAnimation, { passive: true });
+        window.addEventListener('load', initScrollAnimation);
+    </script>
+</body>
+
+</html>
